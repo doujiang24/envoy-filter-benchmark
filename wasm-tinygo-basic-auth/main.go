@@ -86,13 +86,14 @@ const (
 func (ctx *httpHeaders) OnHttpRequestHeaders(numHeaders int, endOfStream bool) types.Action {
 	auth, err := proxywasm.GetHttpRequestHeader("authorization")
 	if err != nil {
-		proxywasm.LogCriticalf("failed to get request auth header: %v", err)
+		proxywasm.SendHttpResponse(403, nil, []byte("forbidden"), 0)
 		return types.ActionContinue
 	}
 
 	username, password, ok := parseBasicAuth(auth)
 	if !ok {
-		proxywasm.LogCriticalf("failed to get request auth header: %v", err)
+		proxywasm.SendHttpResponse(403, nil, []byte("forbidden"), 0)
+		return types.ActionContinue
 	}
 	if username != expectedUsername || password != expectedPassword {
 		proxywasm.SendHttpResponse(403, nil, []byte("forbidden"), 0)
