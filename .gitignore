@@ -1,3 +1,4 @@
 .idea
 */envoy-run.yaml
 */*.so
+*.wasm

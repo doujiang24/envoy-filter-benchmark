@@ -1,12 +1,12 @@
 #!/bin/bash
 
-upstream_ip="172.16.2.156"
-local_ip="172.16.2.157"
+upstream_ip="172.26.222.91"
+local_ip="172.26.222.90"
 
 go120=~/work/go1.20/bin/go
 go121=~/work/go1.21/bin/go
 
-envoy=~/work/envoy/envoy-opt
+envoy=~/work/envoy/envoy-opt-wasm
 
 set -o errexit
 
@@ -14,7 +14,7 @@ kill_envoy() {
     count=`ps aux | grep envoy | grep -v grep | wc -l`
     if [ $count -ne 0 ]; then
         ps aux | grep envoy | grep -v grep | awk '{print $2}' | xargs kill
-        sleep 0.5
+        sleep 1.5
     fi
     count=`ps aux | grep envoy | grep -v grep | wc -l`
     if [ $count -ne 0 ]; then
@@ -66,6 +66,16 @@ bench
 
 cd ..
 
+echo "=== passthrough: wasm running ==="
+
+cd wasm-tinygo-passthrough
+
+make build
+make run upstream_ip=$upstream_ip envoy=$envoy
+bench
+
+cd ..
+
 echo "=== basic auth: golang compiling ==="
 
 cd golang-basic-auth
@@ -87,6 +97,21 @@ cd lua-basic-auth
 
 echo "=== basic auth: lua running ==="
 
+make run-lua upstream_ip=$upstream_ip envoy=$envoy
+bench
+
+echo "=== basic auth: luajit running ==="
+
+make run-luajit upstream_ip=$upstream_ip envoy=$envoy
+bench
+
+cd ..
+
+echo "=== basic-auth: wasm ==="
+
+cd wasm-tinygo-basic-auth
+
+make build
 make run upstream_ip=$upstream_ip envoy=$envoy
 bench
 

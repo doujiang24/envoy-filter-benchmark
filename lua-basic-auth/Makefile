@@ -1,8 +1,12 @@
 upstream_ip=127.0.0.1
 envoy=envoy
 
-run:
+run-lua:
 	sed "s#/path-to-lua-file#$$PWD/basic-auth.lua#g" envoy.yaml | sed "s#upstream_ip#${upstream_ip}#g" > envoy-run.yaml
+	nohup ${envoy} -c envoy-run.yaml &
+
+run-luajit:
+	sed "s#/path-to-lua-file#$$PWD/basic-auth-luajit.lua#g" envoy.yaml | sed "s#upstream_ip#${upstream_ip}#g" > envoy-run.yaml
 	nohup ${envoy} -c envoy-run.yaml &
 
 test:
