@@ -13,15 +13,15 @@ build:
 
 run-120:
 	sed "s#/path-to-golang.so#$$PWD/lib120.so#g" envoy.yaml | sed "s#upstream_ip#${upstream_ip}#g" > envoy-run.yaml
-	GODEBUG=cgocheck=0 nohup ${envoy} -c envoy-run.yaml &
+	GODEBUG=cgocheck=0,gctrace=1 nohup ${envoy} -c envoy-run.yaml &
 
 run-121:
 	sed "s#/path-to-golang.so#$$PWD/lib121.so#g" envoy.yaml | sed "s#upstream_ip#${upstream_ip}#g" > envoy-run.yaml
-	GODEBUG=cgocheck=0 nohup ${envoy} -c envoy-run.yaml &
+	GODEBUG=cgocheck=0,gctrace=1 nohup ${envoy} -c envoy-run.yaml &
 
 run-122:
 	sed "s#/path-to-golang.so#$$PWD/lib122.so#g" envoy.yaml | sed "s#upstream_ip#${upstream_ip}#g" > envoy-run.yaml
-	GODEBUG=cgocheck=0 nohup ${envoy} -c envoy-run.yaml &
+	GODEBUG=cgocheck=0,gctrace=1 nohup ${envoy} -c envoy-run.yaml &
 
 test:
 	curl -s -I 'http://localhost:10000/'

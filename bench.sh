@@ -5,6 +5,7 @@ local_ip="172.26.222.90"
 
 go120=~/work/go1.20/bin/go
 go121=~/work/go1.21/bin/go
+go122=~/work/go-src/bin/go
 
 envoy=~/work/envoy/envoy-opt-wasm
 
